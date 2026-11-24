@@ -60,9 +60,7 @@ const getTemplate = (): Template => ({
 describe('sidebar width options', () => {
   it('accepts omitted widths and positive custom widths', () => {
     expect(() => checkUIOptions({})).not.toThrow();
-    expect(() =>
-      checkUIOptions({ leftSidebarWidth: 100, rightSidebarWidth: 450 }),
-    ).not.toThrow();
+    expect(() => checkUIOptions({ leftSidebarWidth: 100, rightSidebarWidth: 450 })).not.toThrow();
   });
 
   it.each([0, -1, NaN, Infinity, -Infinity])('rejects invalid width %s', (width) => {
@@ -122,7 +120,7 @@ describe('isHexValid test', () => {
 describe('checkGenerateProps', () => {
   test('accepts valid generator schema', () => {
     const validProps = {
-      inputs: [{a: 'a', b: 'b'}],
+      inputs: [{ a: 'a', b: 'b' }],
       template: {
         basePdf: 'data:application/pdf;base64,abc123',
         schemas: [
@@ -133,13 +131,13 @@ describe('checkGenerateProps', () => {
               position: { x: 0, y: 0 },
               width: 100,
               height: 100,
-              content: 'Test'
-            }
-          ]
-        ]
+              content: 'Test',
+            },
+          ],
+        ],
       },
       options: {
-        font: getSampleFont()
+        font: getSampleFont(),
       },
       plugins: {
         text: {
@@ -153,11 +151,11 @@ describe('checkGenerateProps', () => {
               content: '',
               position: { x: 0, y: 0 },
               width: 100,
-              height: 100
-            }
-          }
-        }
-      }
+              height: 100,
+            },
+          },
+        },
+      },
     };
 
     expect(() => checkGenerateProps(validProps)).not.toThrow();
@@ -166,21 +164,23 @@ describe('checkGenerateProps', () => {
   test('throws for invalid template structure', () => {
     const invalidProps = {
       template: {
-        schemas: 'not-an-array' // Invalid type
-      }
+        schemas: 'not-an-array', // Invalid type
+      },
     };
 
-    expect(() => checkGenerateProps(invalidProps)).toThrow("[@pdfme/common] Invalid argument:\n" +
-      "--------------------------\n" +
-      "ERROR POSITION: template.schemas\n" +
-      "ERROR MESSAGE: Invalid input: expected array, received string\n" +
-      "--------------------------\n" +
-      "ERROR POSITION: template.basePdf\n" +
-      "ERROR MESSAGE: Invalid input\n" +
-      "--------------------------\n" +
-      "ERROR POSITION: inputs\n" +
-      "ERROR MESSAGE: Invalid input: expected array, received undefined\n" +
-      "--------------------------");
+    expect(() => checkGenerateProps(invalidProps)).toThrow(
+      '[@pdfme/common] Invalid argument:\n' +
+        '--------------------------\n' +
+        'ERROR POSITION: template.schemas\n' +
+        'ERROR MESSAGE: Invalid input: expected array, received string\n' +
+        '--------------------------\n' +
+        'ERROR POSITION: template.basePdf\n' +
+        'ERROR MESSAGE: Invalid input\n' +
+        '--------------------------\n' +
+        'ERROR POSITION: inputs\n' +
+        'ERROR MESSAGE: Invalid input: expected array, received undefined\n' +
+        '--------------------------',
+    );
   });
 
   test('throws for missing required template field and empty inputs', () => {
@@ -189,25 +189,27 @@ describe('checkGenerateProps', () => {
       template: {
         basePdf: 'data:application/pdf;base64,abc123',
         // schemas is missing
-      }
+      },
     };
 
-    expect(() => checkGenerateProps(missingSchemaProps)).toThrow("[@pdfme/common] Invalid argument:\n" +
-      "--------------------------\n" +
-      "ERROR POSITION: template.schemas\n" +
-      "ERROR MESSAGE: Invalid input: expected array, received undefined\n" +
-      "--------------------------\n" +
-      "ERROR POSITION: inputs\n" +
-      "ERROR MESSAGE: Too small: expected array to have >=1 items\n" +
-      "--------------------------");
+    expect(() => checkGenerateProps(missingSchemaProps)).toThrow(
+      '[@pdfme/common] Invalid argument:\n' +
+        '--------------------------\n' +
+        'ERROR POSITION: template.schemas\n' +
+        'ERROR MESSAGE: Invalid input: expected array, received undefined\n' +
+        '--------------------------\n' +
+        'ERROR POSITION: inputs\n' +
+        'ERROR MESSAGE: Too small: expected array to have >=1 items\n' +
+        '--------------------------',
+    );
   });
 
   test('throws for invalid plugin definitions', () => {
     const invalidPluginProps = {
-      inputs: [{a: 'a'}],
+      inputs: [{ a: 'a' }],
       template: {
         basePdf: 'data:application/pdf;base64,abc123',
-        schemas: [[]]
+        schemas: [[]],
       },
       plugins: {
         invalid: {
@@ -221,9 +223,9 @@ describe('checkGenerateProps', () => {
               content: '',
               position: { x: 0, y: 0 },
               width: 100,
-              height: 100
-            }
-          }
+              height: 100,
+            },
+          },
         },
         missingPanel: {
           pdf: async () => {},
@@ -233,9 +235,9 @@ describe('checkGenerateProps', () => {
         missingDefaultSchema: {
           pdf: async () => {},
           ui: async () => {},
-          propPanel: {}
-        }
-      }
+          propPanel: {},
+        },
+      },
     };
 
     let errorMessage = '';
@@ -248,19 +250,21 @@ describe('checkGenerateProps', () => {
     expect(errorMessage).toContain('[@pdfme/common] Invalid argument:');
     expect(errorMessage).toContain('ERROR POSITION: plugins.invalid.propPanel.defaultSchema.type');
     expect(errorMessage).toContain('ERROR POSITION: plugins.missingPanel.propPanel');
-    expect(errorMessage).toContain('ERROR POSITION: plugins.missingDefaultSchema.propPanel.defaultSchema');
+    expect(errorMessage).toContain(
+      'ERROR POSITION: plugins.missingDefaultSchema.propPanel.defaultSchema',
+    );
   });
 
   test('accepts generate props with a font option', () => {
     const propsWithFont = {
-      inputs: [{a: 'a'}],
+      inputs: [{ a: 'a' }],
       template: {
         basePdf: 'data:application/pdf;base64,abc123',
-        schemas: [[]]
+        schemas: [[]],
       },
       options: {
-        font: { Roboto: { data: new Uint8Array(), fallback: true } }
-      }
+        font: { Roboto: { data: new Uint8Array(), fallback: true } },
+      },
     };
 
     expect(() => checkGenerateProps(propsWithFont)).not.toThrow();
@@ -320,7 +324,7 @@ describe('checkFont test', () => {
     } catch (e: any) {
       expect(e.message).toEqual(
         `[@pdfme/common] fallback flag is not found in font. true fallback flag must be only one.
-Check this document: https://pdfme.com/docs/custom-fonts#about-font-type`
+Check this document: https://pdfme.com/docs/custom-fonts#about-font-type`,
       );
     }
   });
@@ -337,7 +341,7 @@ Check this document: https://pdfme.com/docs/custom-fonts#about-font-type`
     } catch (e: any) {
       expect(e.message).toEqual(
         `[@pdfme/common] 2 fallback flags found in font. true fallback flag must be only one.
-Check this document: https://pdfme.com/docs/custom-fonts#about-font-type`
+Check this document: https://pdfme.com/docs/custom-fonts#about-font-type`,
       );
     }
   });
@@ -374,7 +378,7 @@ Check this document: https://pdfme.com/docs/custom-fonts#about-font-type`
     } catch (e: any) {
       expect(e.message).toEqual(
         `[@pdfme/common] NotoSans2 of template.schemas is not found in font.
-Check this document: https://pdfme.com/docs/custom-fonts`
+Check this document: https://pdfme.com/docs/custom-fonts`,
       );
     }
   });
@@ -412,7 +416,7 @@ Check this document: https://pdfme.com/docs/custom-fonts`
     } catch (e: any) {
       expect(e.message).toEqual(
         `[@pdfme/common] NotoSans2,NotoSerif2 of template.schemas is not found in font.
-Check this document: https://pdfme.com/docs/custom-fonts`
+Check this document: https://pdfme.com/docs/custom-fonts`,
       );
     }
   });
@@ -482,7 +486,7 @@ describe('checkPlugins test', () => {
       fail();
     } catch (e: any) {
       expect(e.message).toEqual(
-        `[@pdfme/common] fail of template.schemas is not found in plugins.`
+        `[@pdfme/common] fail of template.schemas is not found in plugins.`,
       );
     }
   });
@@ -495,7 +499,7 @@ describe('checkPlugins test', () => {
       fail();
     } catch (e: any) {
       expect(e.message).toEqual(
-        `[@pdfme/common] fail,fail2 of template.schemas is not found in plugins.`
+        `[@pdfme/common] fail,fail2 of template.schemas is not found in plugins.`,
       );
     }
   });
