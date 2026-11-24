@@ -251,7 +251,7 @@ describe('checkGenerateProps', () => {
     expect(errorMessage).toContain('ERROR POSITION: plugins.missingDefaultSchema.propPanel.defaultSchema');
   });
 
-  test('calls checkFont when font option is provided', () => {
+  test('accepts generate props with a font option', () => {
     const propsWithFont = {
       inputs: [{a: 'a'}],
       template: {
@@ -263,7 +263,7 @@ describe('checkGenerateProps', () => {
       }
     };
 
-    checkGenerateProps(propsWithFont);
+    expect(() => checkGenerateProps(propsWithFont)).not.toThrow();
   });
 });
 
@@ -292,21 +292,11 @@ describe('checkFont test', () => {
         ],
       ],
     });
-    try {
-      checkFont({ template: _getTemplate(), font: getSampleFont() });
-      expect.anything();
-    } catch (e) {
-      fail();
-    }
+    expect(() => checkFont({ template: _getTemplate(), font: getSampleFont() })).not.toThrow();
   });
 
   test('success test: fontName in Schemas(fallback font)', () => {
-    try {
-      checkFont({ template: getTemplate(), font: getSampleFont() });
-      expect.anything();
-    } catch (e) {
-      fail();
-    }
+    expect(() => checkFont({ template: getTemplate(), font: getSampleFont() })).not.toThrow();
   });
 
   test('success test: fontName in Schemas(not fallback font)', () => {
@@ -315,12 +305,7 @@ describe('checkFont test', () => {
       NotoSerif: { fallback: true, data: serifData },
     });
 
-    try {
-      checkFont({ template: getTemplate(), font: getFont() });
-      expect.anything();
-    } catch (e) {
-      fail();
-    }
+    expect(() => checkFont({ template: getTemplate(), font: getFont() })).not.toThrow();
   });
 
   test('fail test: no fallback font', () => {
@@ -467,46 +452,26 @@ describe('checkPlugins test', () => {
     },
   };
   test('success test: no type in Schemas(no plugins)', () => {
-    try {
-      const template = getTemplate();
-      template.schemas = [];
-      checkPlugins({ template, plugins: {} });
-      expect.anything();
-    } catch (e) {
-      fail();
-    }
+    const template = getTemplate();
+    template.schemas = [];
+    expect(() => checkPlugins({ template, plugins: {} })).not.toThrow();
   });
   test('success test: no type in Schemas(with plugins)', () => {
-    try {
-      const template = getTemplate();
-      template.schemas = [];
-      checkPlugins({ template, plugins });
-      expect.anything();
-    } catch (e) {
-      fail();
-    }
+    const template = getTemplate();
+    template.schemas = [];
+    expect(() => checkPlugins({ template, plugins })).not.toThrow();
   });
   test('success test: type in Schemas(single)', () => {
-    try {
-      const template = getTemplate();
-      template.schemas[0][0].type = 'myText';
-      template.schemas[0][1].type = 'myText';
-      checkPlugins({ template, plugins });
-      expect.anything();
-    } catch (e) {
-      fail();
-    }
+    const template = getTemplate();
+    template.schemas[0][0].type = 'myText';
+    template.schemas[0][1].type = 'myText';
+    expect(() => checkPlugins({ template, plugins })).not.toThrow();
   });
   test('success test: type in Schemas(multiple)', () => {
-    try {
-      const template = getTemplate();
-      template.schemas[0][0].type = 'myText';
-      template.schemas[0][1].type = 'myImage';
-      checkPlugins({ template, plugins });
-      expect.anything();
-    } catch (e) {
-      fail();
-    }
+    const template = getTemplate();
+    template.schemas[0][0].type = 'myText';
+    template.schemas[0][1].type = 'myImage';
+    expect(() => checkPlugins({ template, plugins })).not.toThrow();
   });
   test('fail test: type in Schemas not found in plugins(single)', () => {
     try {
